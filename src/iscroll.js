@@ -501,8 +501,15 @@ iScroll.prototype = {
 						// Find the last touched element
 						target = point.target;
 						while (target.nodeType != 1) target = target.parentNode;
+						
+						var shouldDispatch = true;
+						shouldDispatch = shouldDispatch && (target.tagName != 'SELECT');
+						shouldDispatch = shouldDispatch && (target.tagName != 'TEXTAREA');
+						if (target.tagName == 'INPUT') {
+							shouldDispatch = shouldDispatch && ((target.type == 'submit') || (target.type == 'reset'));
+						}
 
-						if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA') {
+						if (shouldDispatch) {
 							ev = document.createEvent('MouseEvents');
 							ev.initMouseEvent('click', true, true, e.view, 1,
 								point.screenX, point.screenY, point.clientX, point.clientY,
